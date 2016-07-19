@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Wish Upon a Star</title>
+
+<link rel="shortcut icon" href="img/Favicon.png" />
+
+
+	<script src=" " type="text/javascript"></script> <!--googlemap API key-->
+	<script src=" " type="text/javascript" charset="utf-8"></script> <!--googlemap API key-->
+
+<script src="mobilestaratlas.js" type="text/javascript"></script>
+<script src="bdays.js" type="text/javascript"></script>
+<script src="starcatalog.js" type="text/javascript"></script>
+<script src="constellations.js" type="text/javascript"></script>
+<script src="constnames.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="mobilestaratlas.css" type="text/css" media="handheld, only screen and (min-width: 300px), (max-width: 800px)">
+
+<meta name="viewport" content="width=device-width, initial-scale=0.25, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!--Redirect to another site when opened with laptop-->
+<script type="text/javascript">
+  if (screen.width > 800) {
+    window.location = "https://metstars.com:8888/index.html";
+  }
+</script>
+
+
+<!--p5 js libraries-->
+<script src="libraries/p5.js" type="text/javascript"></script>
+<script src="libraries/p5.dom.js" type="text/javascript"></script>
+<script src="libraries/p5.sound.js" type="text/javascript"></script>
+<script src="mobilesketch.js" type="text/javascript"></script>
+ 
+<!-- SOCKET portion-->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+	var socket = io.connect();
+	
+	socket.on('connect', function() {
+		console.log("Connected");
+	});
+
+	socket.on('wish', function(hue){
+		generate(hue);
+	});
+
+	//send a client's wish to the serverside
+	var makeawish = function (data) {
+		if (document.getElementById('makewishinput').value ==""){
+			
+		}else{
+			socket.emit('wish', {wish: data, date: SA.date, latitude: lat, longitude: lng, clr: hueval});
+			document.getElementById('makewishinput').value = "";
+		}
+	};
+
+	//ACCELERATION PORTION
+	function ondevicemotion(e) {
+		var x = Math.floor(e.acceleration.x);
+		var y = Math.floor(e.acceleration.y);
+		var z = Math.floor(e.acceleration.z);
+
+		if (x>=15){
+			makeawish(document.getElementById('makewishinput').value);
+		}
+	}
+
+	window.addEventListener('devicemotion', ondevicemotion, false);
+
+</script>
+
+<!-- DEVICE INTERACTION Portion -->
+<script type="text/javascript">
+
+	//ORIENTATION PORTION
+	function onOrientationChange(e) {
+		var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+		var alpha = Math.floor(e.alpha);
+		var beta = Math.floor(e.beta);
+		var gamma = Math.floor(e.gamma);
+
+		if (alpha>=180){
+			alpha = (360-alpha)*-1;			
+			SA.changeCenter(alpha,beta*2);
+		}
+		if (beta<=-90){
+			beta = beta + 180;			
+			SA.changeCenter(alpha,beta*2);
+		}
+		else{
+			alpha = alpha;
+			SA.changeCenter(alpha,beta*2);
+		}
+
+	}
+
+</script>
+
+<script type="application/x-javascript">
+
+	var canvas = null;		
+	var chart = null;
+	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+	var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	var lat;
+	var lng;
+			
+	function init() {
+
+		canvas = document.getElementById("chartcanvas");
+		chart = canvas.getContext("2d");
+		canvas.width = w;
+		canvas.height = h;
+
+		window.addEventListener('deviceorientation', onOrientationChange, false);
+		//**
+		//THIS PORTION GIVES YOU CURRENT LOCATION AS WELL
+		//**
+		 if (google.loader.ClientLocation) {
+			var cl = google.loader.ClientLocation;
+			lat = parseFloat(cl.latitude);
+			lng = parseFloat(cl.longitude);	
+			console.log("Latitude: " + lat + ", Longitude: " + lng);
+		}else{
+			lat = -74;
+			lng = 40;
+		}
+
+		SA.printlocationmap(lat,lng);			
+		SA.date = new Date();
+		
+		SA.generateChart(lat, lng, SA.date);
+		SA.interval = setInterval(function () {SA.animate(lat,lng);}, 1000);
+		
+		canvas.addEventListener("mousedown", function (evt) {
+			SA.mousedown = true;
+
+		}, false);
+
+		}
+
+	function infobox(data) {
+		element = document.getElementById(data);
+		element.style.visibility = (element.style.visibility == "visible") ? "hidden" : "visible";
+	}		
+	function getrand(min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+	var hueval = getrand(0,360);
+
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10365581-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+<style> 
+body {
+	padding: 0; 
+	margin: 0;
+} 
+canvas {
+	position:absolute;
+	vertical-align: top;
+	} 
+</style>
+
+</head>
+
+
+<body onload="init();">
+
+<div id="container">
+
+<div id="main" class="infobox" style="visibility: visible;">
+	<img id="mainimg" src="img/Logo_Phone.png">
+	<a class="makewishbutton" href="#" onclick='infobox("main"),infobox("aboutmakewish")'>Make a Wish</a>
+	<a class="signbutton" href="#" onclick='infobox("main"), infobox("sign")'>Find My Zodiac</a>
+</div>
+
+<div id="topnav">
+	<a id="cornerlogo" href="#" onclick='SA.reset()'><img src="img/cornerLogo.png"></a>
+	<a id="myzodiacbutton" style="visibility: hidden;" class="infobox" href='#' onclick='infobox("signdata")'></a>	
+	<a id="exit" href='#' onclick='SA.reset()'>EXIT</a>
+</div>
+
+<div id="sign" class="infobox">
+<div id="signcont">
+<p class="zodiactext">Submit your birth date to find out about your zodiac. Then, move your mobile device to look for the sign in the sky.</p>  
+  MONTH:<br>
+  <input type="text" id="month" placeholder="01" min="1" max="12" ><br>
+  DAY:<br>
+  <input type="text" id="day" placeholder="15" min"1" max="31" s><br>
+  YEAR:<br>
+  <input type="text" id="year" placeholder="1980" min="1900" max="2016" ><br>
+  
+  <a href"#" onclick='SA.bdayPrompt(), infobox("sign"), infobox("myzodiacbutton"), infobox("signdata")'><div class = "zodiacbutton01">SUBMIT</div></a>
+</div>
+</div>
+
+<div id="signdata" class="infobox" style="visibility: hidden;">
+<div id="signdatacont">
+<p id="signTitle" style="color:#282828;"></p>
+<p id="description"></p>
+<a style="color:black;" href='#' onclick='infobox("signdata")'><div class = "signbutton01">CLOSE</div></a>
+</div>
+</div>
+
+<div id="makewish" class="infobox" style="visibility: hidden;">
+	<textarea id="makewishinput" placeholder="My wish is ..."></textarea>
+	<div id="twit">Your wishes will be tweeted @METWishes</div>
+</div>
+
+<div id="aboutmakewish" class="infobox" style="visibility: hidden;">
+<div id="aboutmakewishcont">
+<cite>When you wish upon a star Makes no difference who you are.</cite></br></br>
+
+Type in your wish, shake your mobile device, you will see a shooting star across the sky.</br></br>
+
+<cite>Anything your heart desires Will come to you.</cite></br></br>
+<a href='#' onclick='infobox("aboutmakewish"),infobox("makewish")'><div class = "gotitbutton">GOT IT</div></a>
+</div>
+</div>
+
+<div id="chartdiv">
+<canvas id="chartcanvas" ></canvas>
+<a class="solar" id="Sun">Sun</a>
+<a class="solar" id="Moon">Moon</a>
+<a class="solar" id="Mercury">Mercury</a>
+<a class="solar" id="Venus">Venus</a>
+<a class="solar" id="Mars">Mars</a>
+<a class="solar" id="Jupiter">Jupiter</a>
+<a class="solar" id="Saturn">Saturn</a>
+<a class="solar" id="BugPlanet">Starship</a>
+</div> 
+</div>
+</div>
+
+</body>
+</html>
+

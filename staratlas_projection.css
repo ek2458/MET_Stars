@@ -1,0 +1,170 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    position:absolute;
+	margin: 0%;
+	padding: 0%;
+	color: white;
+	font-family: "Futura", Verdana, Arial, sans-serif;
+	font-weight:lighter;
+	width:100%;
+	height:100%;
+	overflow: hidden;
+	}
+	
+/* Clearfix */
+
+a {
+	/*background: linear-gradient(330deg, #e05252 0%, #99e052 25%, #52e0e0 50%, #9952e0 75%, #e05252 100%);
+ 	-webkit-background-clip: text;
+ 	-webkit-text-fill-color: transparent;*/
+ 	color: white;
+ 	text-decoration: none;
+	font-family: "Futura", Verdana, Arial, sans-serif;
+	font-weight: lighter;
+	}
+a:active {
+    text-decoration: underline;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+	color: #ffffff;
+	}
+	
+input{
+	width: 50%;
+	height: 10%;
+	font-size: 25pt;
+	margin-top: 0.5em;
+	margin-bottom: 0.75em;
+	font-family: "Futura", Verdana, Arial, sans-serif;
+		
+}
+
+
+.infobox {
+	visibility: hidden;
+	text-align:left;	
+	}
+
+/*button or nav*/
+#mainnav {
+	position: absolute;
+	width: 100%;
+	height: 2em;
+	z-index: 100;
+	padding-top: 2.5em;
+	padding-left: 3em;
+	/*mix-blend-mode: difference;*/
+	}
+
+.logo {
+	width:100px;
+	z-index: 20;
+}
+
+.location {
+	position:relative;
+	float:right;
+	padding-right:7em;
+	line-height: 3em;
+
+}
+
+ #location {
+ 	position: absolute;
+	top: 40%;
+	left: 25%;
+	width: 50%;
+	z-index: 10;
+	font-size: 5vh;
+	text-align: center;
+	line-height: 1.5em;
+}
+
+.infobox {
+	visibility: hidden;
+	position: absolute;
+	text-align:left;	
+	}
+
+
+.textButton{
+	font-size:3vh;
+}
+
+/* mapped stars and planets */
+#chartdiv {
+	background-color: black;
+	position: absolute;
+	width:100%;
+	height:100%;
+	margin:0%;
+	padding:0%;
+	}
+
+#chartcanvas{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	margin:0%;
+	padding:0%;
+}
+
+#Sun {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#Moon {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#Mercury {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#Venus {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#Mars {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#Jupiter {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#Saturn {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#BugPlanet {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+div.solar {
+	font-size: 8pt;
+	}
+
+a.solar {	
+	font-size: 8pt;
+	
+	}
+
+/*google map api remove logo and terms of use*/

@@ -1,0 +1,367 @@
+/*Mobile Orientation Force landscape*/
+/*@media screen and (orientation:landscape){
+  #container { 
+  	display:none; 
+  }
+  #warning-message { 
+  	display:block; 
+  }
+}
+
+@media screen and (orientation:portrait){
+  #container {  
+  	display:block;
+  
+    /*-webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+    *
+	}
+}*/
+* {
+    box-sizing: border-box;
+}
+
+body[orient="portrait"] { min-height: vh +60px; }
+body[orient="landscape"] { min-height: vh +60px; }
+
+/*start usual css*/
+body{
+	min-height: 100%;
+	background-repeat: no-repeat;
+    background-position: center top;
+    position:absolute;
+	margin: 0%;
+	padding: 0%;
+	color: #ffffff;
+	font-family: "helvetica", arial, verdana, sans-serif;
+	font-weight: lighter;
+	overflow: hidden;
+	width:100%;
+	font-size: 2em;
+	line-height: 1.5em;
+	}
+	
+/* Clearfix */
+a {
+ 	color: #ffffff;
+ 	text-decoration: none;
+	}
+
+p {
+	color: #ffffff;
+	}
+
+input{
+	width: 25%;
+	font-size: 1.5em;
+	margin-top:0.25em;
+	margin-bottom:0.75em;
+	font-family: "helvetica", arial, verdana, sans-serif;
+	text-align: center;
+}
+input[type="checkbox"]{
+  width: 1.25em; /*Desired width*/
+  height: 1.25em; /*Desired height*/
+}
+
+#topnav{
+	position:absolute;
+	width:100%;
+	padding-top:2em;
+	padding-left:2em;
+	z-index: 15;
+}
+#exit{
+	position:absolute;
+	font-size: 1.5em;
+	right:3em;
+	line-height:3.5em;
+}
+
+#myzodiacbutton{
+	position:absolute;
+	font-size: 1.5em;
+	right:3em;
+	line-height:3.5em;
+}
+
+.infobox {
+	position: absolute;
+	text-align:left;	
+	}
+
+/*Man page of the application*/
+#main {
+	display: block;
+	width:100%;
+	height:100%;
+	background-color: #eb0029;
+	z-index: 20;
+	font-size:3vh;
+	}
+
+#mainimg{
+	display: block;
+	height:50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:1.5em;
+    margin-bottom:1.5em;
+
+}
+.makewishbutton{
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width:50%;
+    margin-top:2em;
+
+	background-color: #fdfdfd;
+	padding: 1.75em .5em 1.75em .5em;
+	color: #282828;
+	/*text-transform: uppercase;*/
+	text-align: center;
+	font-weight: bold;
+	/*border-radius: 25px;*/
+}
+
+.signbutton{
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width:50%;
+    margin-top:0.75em;
+	
+	background-color: #fdfdfd;
+	padding: 1.75em .5em 1.75em .5em;
+	color: #282828;
+	/*text-transform: uppercase;*/
+	text-align: center;
+	font-weight: bold;
+	/*border-radius: 25px;*/
+}
+
+/*Find your Sign*/
+ #sign {
+ 	display: block;
+	background-color: #282828;
+	color: #ffffff;
+	width: 100%;
+	height: 100%;
+	padding:0%;
+	margin:0%;
+	visibility: hidden;	
+	z-index: 10;
+	font-size:2.5vh;
+	}
+#signcont{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 5.5em;
+	text-align: center;
+	line-height: 1.25em;
+}
+/*explanation*/
+.zodiactext{
+	color: #ffffff;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom:2.5em;
+	text-align: center;
+	width:80%;
+	font-size: 2.5vh;
+	line-height: 1.5em;
+}
+
+.zodiacbutton01{
+	position:absolute;
+	width:100%;
+	height:10%;
+	top:90%;
+	background-color: #eb0029;
+
+	color: white;
+	font-size: 3vh;
+	padding: 1em .5em 1em .5em;	
+}
+
+
+#signdata{
+	font-size:2vh;
+	display: block;
+	width:80%;
+	height:auto;
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-top: 5em;
+
+	background-color:white;
+	visibility: hidden;	
+	z-index: 10;
+
+}
+#signdatacont{
+	color: #282828;
+	text-align: center;
+	overflow-y: scroll;
+}
+#signTitle{
+	z-index: 10;
+	color: #ffffff;
+	font-size: 3vh;
+}
+#description{
+	color: #282828;
+	text-align: left;
+	font-size:2.5vh;
+	line-height: 1.25em;
+	margin:2em;
+}
+.signbutton01{
+	background-color: #eb0029;
+	bottom:0px;
+	width:100%;
+	font-size: 2.5vh;
+	color:white;
+	padding:1.25em;
+
+}
+
+/*wishes portion*/
+#makewish{
+	display:block;
+	width:100%;
+	height:100%;
+	z-index: 10;
+	font-size: 2vh;
+}
+
+#makewishinput{
+	position: absolute;
+	left: 0%;
+	top: 77%;
+	width: 100%;
+	height: 15%;
+	padding: .5em;
+	text-align: left;
+	font-size: 4vh;
+	z-index: 10;
+}
+
+
+#twit{
+	background-color: #eb0029;
+	position:absolute;
+	left: 0%;
+	top: 92%;
+	width:100%;
+	height:8%;
+	padding: 1em 0.5em 0.5em 1em;
+	font-size: 2.5vh;
+}
+
+#aboutmakewish{
+	display:block;
+	background-color:white;
+	margin-left:10%;
+	margin-right:10%;
+	margin-top: 25%;
+	width: 80%;
+	height: auto;
+	visibility: hidden;	
+	z-index: 10;
+}
+
+#aboutmakewishcont{
+	font-size: 2.75vh;
+	line-height: 1.5em;
+	color:black;
+	padding:2em;
+	text-align: center;
+	z-index: 10;
+}
+.gotitbutton{
+	width:100%;
+	background-color: #eb0029;
+	color: white;
+	padding: 1em .5em 1em .5em;
+	z-index: 11;
+	font-size: 2vh;
+
+}
+
+
+
+/* mapped stars and planets */
+#chartdiv {
+	background-color: black;
+	position: absolute;
+	width:100%;
+	height:100%;
+	margin:0%;
+	padding:0%;
+	}
+
+#chartcanvas{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	margin:0%;
+	padding:0%;
+}
+
+#Sun {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#Moon {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#Mercury {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#Venus {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#Mars {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#Jupiter {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#Saturn {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+#BugPlanet {
+	position: absolute;
+	visibility: hidden;
+	}
+	
+div.solar {
+	font-size: 8pt;
+	}
+
+a.solar {	
+	font-size: 8pt;
+	
+	}
+
+/*google map api remove logo and terms of use*/

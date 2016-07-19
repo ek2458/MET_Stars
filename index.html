@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Wish Upon a Star</title>
+
+<link rel="shortcut icon" href="img/Favicon.png" />
+
+	<script src=" " type="text/javascript"></script> <!--googlemap API key-->
+	<script src=" " type="text/javascript" charset="utf-8"></script> <!--googlemap API key-->
+
+<script src="staratlas.js" type="text/javascript"></script>
+<script src="bdays.json" ></script>
+<script src="starcatalog.js" type="text/javascript"></script>
+<script src="constellations.js" type="text/javascript"></script>
+<script src="constnames.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="staratlas.css" type="text/css" media="screen">
+<!--Redirect to another site when opened with laptop-->
+<script type="text/javascript">
+var theurl = "https:" + window.location.href.substring(window.location.protocol.length);
+var newurl = theurl.replace("com/","com:8888/index.html");
+if (window.location.protocol != "https:")
+    // window.location.href = "https:" + window.location.href.substring(window.location.protocol.length) + ":8888";
+    window.location.href = newurl;
+
+  if (screen.width < 800) {
+    window.location = "https://metstars.com:8888/mobileindex.html";
+  }
+</script>
+
+
+<!--p5 js libraries-->
+<script src="libraries/p5.js" type="text/javascript"></script>
+<script src="libraries/p5.dom.js" type="text/javascript"></script>
+<script src="libraries/p5.sound.js" type="text/javascript"></script>
+<script src="mobilesketch.js" type="text/javascript"></script>
+ 
+<!-- SOCKET portion-->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+	var socket = io.connect();
+	
+	socket.on('connect', function() {
+		console.log("Connected");
+	});
+
+	//receive the wish broadcasted from serversite and display to the clients
+	socket.on('wish', function(hue){
+		
+		console.log(hue);
+		generate(hue);
+	});
+
+
+</script>
+<script type="application/x-javascript">
+
+	var canvas = null;		
+	var chart = null;
+	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+	var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	var lat;
+	var lng;
+			
+	function init() {
+
+		canvas = document.getElementById("chartcanvas");
+		chart = canvas.getContext("2d");
+		canvas.width = w;
+		canvas.height = h;
+	
+		//Default observer coords
+		var lat = 40.7294245;
+		var lng = -73.993707; 			
+		
+		if (SA.getcookie("lat")) {
+			lat = parseFloat(SA.getcookie("lat"));
+			lng = parseFloat(SA.getcookie("lng"));
+							
+			//Reset expiration date for cookie to 60 days in the future
+			SA.setcookie("lat", lat);
+			SA.setcookie("lng",lng);
+		} 
+		else if (google.loader.ClientLocation) {
+			var cl = google.loader.ClientLocation;
+			lat = parseFloat(cl.latitude);
+			lng = parseFloat(cl.longitude);						
+		}
+
+		SA.printlocationmap(lat,lng);			
+		SA.date = new Date();
+		
+		SA.generateChart(lat, lng, SA.date);
+		SA.interval = setInterval(function () {SA.animate(lat,lng);}, 300000);
+
+		}
+	function getrand(min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+	var hueval = getrand(0,360);
+
+	function infobox(data) {
+		element = document.getElementById(data);
+		element.style.visibility = (element.style.visibility == "visible") ? "hidden" : "visible";
+	}		
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10365581-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+  function sendit(){
+		makewishes(document.getElementById('mywishinput').value);
+	}
+
+  function makewishes(data) {
+		if (document.getElementById('mywishinput').value = ""){
+			
+		}else{
+			socket.emit('wish', {wish: data, date: SA.date, latitude: lat, longitude: lng, clr: hueval});
+			document.getElementById('mywishinput').value = "";
+		}
+	};
+</script>
+
+<style> 
+body {
+	padding: 0; 
+	margin: 0;
+} 
+canvas {
+	position:absolute;
+	vertical-align: top;
+	} 
+</style>
+
+</head>
+
+<body onload="init();">
+
+<div id="mainnav">
+	<a href="#" onclick="SA.reset()"><img class="logo" src="img/cornerLogo.png"></a>
+	<a class="location" href="#" onclick='infobox("location")'>LOCATION</a>
+	<a class="sign" href="#" onclick='infobox("sign")'>SIGN</a>
+	<a class="makewish" href="#" onclick='infobox("makewish")'>MAKE A WISH</a>
+</div>
+
+<div id="makewish" class="infobox">
+TELL US YOUR WISH<br>
+<textarea id="mywishinput" rows="3" placeholder="My wish is ..."></textarea>
+<a class = "textButton" href"#" onclick='sendit(), infobox("makewish")'>MAKE A WISH</a> 
+</div>
+
+<div id="location" class="infobox">
+YOUR LOCATION<br>
+<input type="text" id="loc" placeholder="New York, NY" min="1" max="12"><br>
+<a class = "textButton" href"#" onclick='SA.locationPrompt(), infobox("locdata"), infobox("location")'>ENTER</a> 
+<!-- <a class = "textButton" href"#" onclick='SA.reset()'>| GO BACK</a> -->
+</div>
+
+
+
+<div id="locdata" class="infobox" style="visibility: hidden;">
+<div id="locationmap" ></div>
+This is the sky you are looking at from<br/>
+<div id="time" ></div>
+<a class = "textButton" href="#" onclick='SA.rotate()'>ROTATAE </a>
+<a class = "textButton" href='#' onclick='SA.reset()'>| CLOSE</a>
+<p id="longlat" style="display:none;"></p>
+</div>
+
+
+
+<div id="sign" class="infobox">
+  MONTH:<br>
+  <input type="text" id="month" placeholder="01" min="1" max="12" ><br>
+  DAY:<br>
+  <input type="text" id="day" placeholder="15" min"1" max="31" s><br>
+  YEAR:<br>
+  <input type="text" id="year" placeholder="1980" min="1900" max="2016" ><br>
+  <a class = "textButton" href"#" onclick='SA.bdayPrompt(), infobox("signdata"), infobox("sign")'>SUBMIT</a>
+</div>
+
+<div id="signdata" style="visibility: hidden;">
+<p id="signTitle"></p>
+<p id="description"></p>
+<a class = "textButton" style="margin: 2em; color:white;" href='#' onclick='SA.reset()'>CLOSE</a>
+</div>
+
+<div id="chartdiv">
+<canvas id="chartcanvas"></canvas>
+<a class="solar" id="Sun">Sun</a>
+<a class="solar" id="Moon">Moon</a>
+<a class="solar" id="Mercury">Mercury</a>
+<a class="solar" id="Venus">Venus</a>
+<a class="solar" id="Mars">Mars</a>
+<a class="solar" id="Jupiter">Jupiter</a>
+<a class="solar" id="Saturn">Saturn</a>
+<a class="solar" id="BugPlanet">Starship</a>
+</div>  
+
+
+<div id="moondist" style="display:none;"></div><div id="merdist" style="display:none;"></div><div id="sundist" style="display:none;"></div><div id="vendist" style="display:none;"></div><div id="marsdist" style="display:none;"></div><div id="jupdist" style="display:none;"></div><div id="satdist" style="display:none;"></div>
+
+
+</body>
+</html>
+
